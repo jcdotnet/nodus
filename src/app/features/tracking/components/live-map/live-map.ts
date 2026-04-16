@@ -43,10 +43,6 @@ export class LiveMap implements OnInit {
   ngOnInit(): void {
     this.facade.loadVehicles();
     this.initMap();
-
-    // setTimeout(() => {
-    //   this.facade.selectVehicle('3'); // Málaga (testing flyTo effect)
-    // }, 3000);
   }
 
   /**

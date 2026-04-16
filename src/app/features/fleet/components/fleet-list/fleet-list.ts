@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FleetFacade } from '../../facades/fleet.facade';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fleet-list',
@@ -11,6 +12,7 @@ import { FleetFacade } from '../../facades/fleet.facade';
 export class FleetList {
 
   protected readonly facade = inject(FleetFacade);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.facade.loadVehicles();
@@ -24,6 +26,11 @@ export class FleetList {
       emergency: 'bg-red-50 text-red-700 border-red-200'
     };
     return theme[status] || theme['idle'];
+  }
+
+  protected viewOnMap(id: string): void {
+    this.facade.selectVehicle(id); // Guarda el ID en el Signal
+    this.router.navigate(['/tracking']); // Navega a la página del mapa
   }
 
 }
