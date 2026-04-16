@@ -1,0 +1,60 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Fleet Management</h1>
+    <div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 shadow-sm">
+      <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+      <span class="text-sm font-medium text-slate-600">Active Units: {{ facade.activeCount() }}</span>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (facade.loading()) {
+  <div class="flex flex-col items-center justify-center p-20 space-y-4">
+    <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500"></div>
+    <p class="text-sm font-medium text-slate-500">Synchronizing fleet telemetry...</p>
+  </div>
+  } @else {
+  <!-- Table -->
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <table class="w-full text-left border-collapse">
+      <thead class="border-b border-slate-200 bg-slate-50">
+        <tr>
+          <th class="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Asset / VIN</th>
+          <th class="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+          <th class="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Fuel</th>
+          <th class="p-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Speed</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (vehicle of facade.vehicles(); track vehicle.id) {
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="p-4">
+            <div class="font-semibold text-slate-900">{{ vehicle.plate }}</div>
+            <div class="font-mono text-xs text-slate-400">{{ vehicle.vin }}</div>
+          </td>
+          <td class="p-4">
+            <span
+              [class]="'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ' + getStatusStyles(vehicle.status)">
+              {{ vehicle.status }}
+            </span>
+          </td>
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <div class="h-1.5 w-24 overflow-hidden rounded-full bg-slate-100">
+                <div class="h-full bg-blue-500 transition-all duration-500"
+                  [style.width.%]="vehicle.telemetry.fuelLevel"></div>
+              </div>
+              <span class="text-xs font-medium text-slate-600">{{ vehicle.telemetry.fuelLevel }}%</span>
+            </div>
+          </td>
+          <td class="p-4 text-right text-sm font-medium text-slate-700">
+            {{ vehicle.telemetry.speed }} <span class="font-normal text-slate-400">km/h</span>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>

@@ -1,0 +1,41 @@
+<div class="flex h-screen bg-slate-50 font-sans">
+
+  <!-- Sidebar -->
+  <aside class="flex w-64 flex-col bg-brand-dark text-white shadow-xl">
+    <div class="p-8">
+      <h1 class="text-2xl font-bold tracking-tight text-blue-500">NODUS</h1>
+      <p class="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400">
+        Logistics Control
+      </p>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1">
+      <a routerLink="/fleet" routerLinkActive="bg-slate-800 text-blue-400 border-l-4 border-blue-400"
+        class="group flex items-center p-3 rounded-lg hover:bg-slate-800 transition-all duration-200">
+        <span class="font-medium">Fleet Assets</span>
+      </a>
+    </nav>
+
+    <div class="border-t border-slate-800 p-6">
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 font-bold">JD</div>
+        <div>
+          <p class="font-semibold text-slate-200 text-sm">jc.dotnet</p>
+          <p class="text-slate-500 text-[10px]">Fleet Manager</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="flex flex-1 flex-col overflow-hidden">
+    <header class="flex h-16 items-center border-b border-slate-200 bg-white px-8">
+      <span class="h-2 w-2 rounded-full bg-emerald-500 mr-2"></span>
+      <span class="text-xs font-medium text-slate-400 italic tracking-wide">System Operational</span>
+    </header>
+
+    <section class="flex-1 overflow-y-auto p-10 bg-slate-50">
+      <router-outlet />
+    </section>
+  </main>
+</div>
