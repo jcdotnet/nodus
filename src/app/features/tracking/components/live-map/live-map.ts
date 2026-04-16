@@ -26,11 +26,27 @@ export class LiveMap implements OnInit {
     effect(() => {
       this.updateMarkers(this.facade.vehicles());
     });
+    effect(() => {
+      const id = this.facade.selectedId();
+      if (id && this.markers.has(id)) {
+        const marker = this.markers.get(id)!;
+        // Professional smooth transition
+        this.map.flyTo(marker.getLatLng(), 14, {
+          animate: true,
+          duration: 2 // seconds
+        });
+        marker.openPopup();
+      }
+    });
   }
 
   ngOnInit(): void {
     this.facade.loadVehicles();
     this.initMap();
+
+    // setTimeout(() => {
+    //   this.facade.selectVehicle('3'); // Málaga (testing flyTo effect)
+    // }, 3000);
   }
 
   /**

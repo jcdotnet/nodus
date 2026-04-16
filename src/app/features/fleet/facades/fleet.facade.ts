@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { finalize, switchMap, tap } from "rxjs";
 
 import { FleetDataService } from "../services/fleet-data.service";
@@ -14,10 +14,14 @@ export class FleetFacade {
   private readonly dataService = inject(FleetDataService);
   private readonly state = inject(FleetState);
 
+  private readonly _selectedId = signal<string | null>(null);
+
   // Expose state as read-only signals
   readonly vehicles = this.state.vehicles;
   readonly loading = this.state.loading;
   readonly activeCount = this.state.activeCount;
+
+  readonly selectedId = this._selectedId.asReadonly();
 
   /**
    * Initializes the fleet load and then switches to the live telemetry stream
@@ -38,5 +42,9 @@ export class FleetFacade {
         finalize(() => this.state.setLoading(false)),
       )
       .subscribe();
+  }
+
+  selectVehicle(id: string | null): void {
+    this._selectedId.set(id);
   }
 }
