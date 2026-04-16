@@ -16,6 +16,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/fleet/components/fleet-list/fleet-list')
             .then(m => m.FleetList)
+      },
+      {
+        path: 'tracking',
+        loadComponent: () => import('./features/tracking/components/live-map/live-map')
+          .then(m => m.LiveMap)
       }
     ],
   }
