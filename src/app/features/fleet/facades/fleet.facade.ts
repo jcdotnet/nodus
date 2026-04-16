@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { finalize, tap } from "rxjs";
+import { finalize, switchMap, tap } from "rxjs";
 
 import { FleetDataService } from "../services/fleet-data.service";
 import { FleetState } from "../state/fleet.state";
@@ -20,7 +20,7 @@ export class FleetFacade {
   readonly activeCount = this.state.activeCount;
 
   /**
-   * Orchestrates the vehicle loading flow
+   * Initializes the fleet load and then switches to the live telemetry stream
    */
   loadVehicles(): void {
     this.state.setLoading(true);
@@ -28,6 +28,12 @@ export class FleetFacade {
     this.dataService
       .getVehicles()
       .pipe(
+        tap((data) => {
+          this.state.setVehicles(data);
+          this.state.setLoading(false);
+        }),
+        // Once initial data is loaded, switch to the real-time stream
+        switchMap(() => this.dataService.getLiveTelemetry()),
         tap((data) => this.state.setVehicles(data)),
         finalize(() => this.state.setLoading(false)),
       )
