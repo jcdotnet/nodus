@@ -4,7 +4,7 @@ import { Vehicle } from '../models/vehicle.model';
 
 @Injectable({ providedIn: 'root' })
 export class FleetDataService {
-  
+
   getVehicles(): Observable<Vehicle[]> {
     const mockVehicles: Vehicle[] = [
       {
