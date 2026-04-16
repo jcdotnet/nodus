@@ -21,7 +21,7 @@ We use a **Signal-based** approach to avoid unnecessary change detection:
 - **Strict Typing**: No `any` allowed. Everything must be interfaced.
 
 ## Roadmap
-- [ ] **Milestone 1**: Core scaffold and Fleet domain definition.
-- [ ] **Milestone 2**: Real-time telemetry simulation (RxJS).
-- [ ] **Milestone 3**: Dashboard implementation and Map integration.
-- [ ] **Milestone 4**: PWA support and offline capabilities.
+- [x] **Milestone 1**: Core scaffold and Fleet domain definition.
+- [x] **Milestone 2**: Real-time telemetry simulation (RxJS).
+- [x] **Milestone 3**: Dashboard implementation and Map integration.
+- [x] **Milestone 4**: State persistence and UI performance optimization.
