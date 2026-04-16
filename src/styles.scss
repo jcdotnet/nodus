@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-dark: #0f172a;
+  --color-brand-primary: #3b82f6;
+}
 
 body {
   @apply bg-slate-50 text-slate-900 antialiased;

@@ -3,7 +3,7 @@
 Enterprise-grade logistics and fleet management platform. Built with a focus on real-time data, high performance, and clean architecture.
 
 ## Tech Stack
-- **Angular 18** (Zoneless + Signals)
+- **Angular 20** (Zoneless + Signals)
 - **Tailwind CSS**
 - **RxJS** for telemetry streams
 - **Leaflet** for geospatial visualization
