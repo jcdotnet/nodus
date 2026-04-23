@@ -11,8 +11,8 @@ I've organized the code **by domain**. All logic is encapsulated within the `Fle
 ## State & Performance
 This is a **Zoneless** application. I decided to skip `zone.js` to avoid global change detection cycles and improve performance.
 
-*   **Signals**: I use them for state because they only update the parts of the UI that actually change. It's much more efficient for real-time tracking.
-*   **RxJS**: Kept strictly for handling async data streams like telemetry.
+*   **Signals**: I use them for state because they only update the parts of the UI that actually change. This is much more efficient for real-time tracking.
+*   **RxJS**: Kept strictly for handling asynchronous data streams like telemetry.
 *   **Facade Pattern**: Components only talk to Facades, which handle the flow between services and the state. This keeps the view layer focused on rendering and easier to maintain.
 
 ## Testing Strategy
