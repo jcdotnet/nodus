@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit,
 import * as L from 'leaflet';
 
 import { FleetFacade } from '../../../fleet/facades/fleet.facade';
+import { Vehicle, VehicleStatus, VehicleType } from '../../../fleet/models/vehicle.model';
 
 const MAP_ICONS = {
   TRUCK: 'M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z',
@@ -30,7 +31,7 @@ export class LiveMap implements OnInit {
       const id = this.facade.selectedId();
       if (id && this.markers.has(id)) {
         const marker = this.markers.get(id)!;
-        // Professional smooth transition
+
         this.map.flyTo(marker.getLatLng(), 14, {
           animate: true,
           duration: 2 // seconds
@@ -49,7 +50,7 @@ export class LiveMap implements OnInit {
   * Generates a custom SVG icon for Leaflet markers based on vehicle properties.
   * Using DivIcon to avoid external image requests and allow dynamic styling.
   */
-  private createVehicleIcon(type: string, status: string): L.DivIcon {
+  private createVehicleIcon(type: VehicleType, status: VehicleStatus): L.DivIcon {
     const iconPath = type.toLowerCase() === 'truck' ? MAP_ICONS.TRUCK : MAP_ICONS.VAN;
     const color = status === 'active' ? '#2563eb' : '#64748b';
 
@@ -74,7 +75,7 @@ export class LiveMap implements OnInit {
     }).addTo(this.map);
   }
 
-  private updateMarkers(vehicles: any[]): void {
+  private updateMarkers(vehicles: Vehicle[]): void {
     if (!this.map) return;
 
     vehicles.forEach(vehicle => {

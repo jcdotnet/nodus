@@ -4,10 +4,7 @@ import { finalize, switchMap, tap } from "rxjs";
 import { FleetDataService } from "../services/fleet-data.service";
 import { FleetState } from "../state/fleet.state";
 
-/**
- * Facade used to decouple UI components from RxJS streams and state logic.
- * It provides a clean Signal-based API for the view layer.
- */
+
 @Injectable({ providedIn: 'root' })
 export class FleetFacade {
 
@@ -29,8 +26,7 @@ export class FleetFacade {
   loadVehicles(): void {
     this.state.setLoading(true);
 
-    this.dataService
-      .getVehicles()
+    this.dataService.getVehicles()
       .pipe(
         tap((data) => {
           this.state.setVehicles(data);
