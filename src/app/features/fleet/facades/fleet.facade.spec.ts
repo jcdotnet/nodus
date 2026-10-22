@@ -17,13 +17,14 @@ describe('FleetFacade', () => {
     plate: '1234-MAD',
     type: 'truck',
     status: 'active',
+    routeId: 'MAD',
     telemetry: {
-      lat: 40.4168,
-      lng: -3.7038,
       fuelLevel: 80,
       speed: 90,
       lastUpdate: new Date().toISOString()
-    }
+    },
+    fallbackLat: 40.4168,
+    fallbackLng: -3.7038,
   };
 
   beforeEach(() => {

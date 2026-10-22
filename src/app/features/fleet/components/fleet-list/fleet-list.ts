@@ -31,8 +31,9 @@ export class FleetList {
   }
 
   protected viewOnMap(id: string): void {
-    this.facade.selectVehicle(id); // Guarda el ID en el Signal
-    this.router.navigate(['/tracking']); // Navega a la página del mapa
+    this.facade.selectVehicle(id);
+    this.router.navigate(['/tracking'], {
+      state: { focusVehicle: true }
+    });
   }
-
 }

@@ -11,13 +11,16 @@ describe('FleetState', () => {
       plate: '1234-MAD',
       type: 'truck',
       status: 'active',
+      routeId: null,
       telemetry: {
         lat: 40.4381,
         lng: -3.6914,
         fuelLevel: 75,
         speed: 85,
         lastUpdate: new Date().toISOString()
-      }
+      },
+      fallbackLat: 40.4168,
+      fallbackLng: -3.7038,
     },
     {
       id: '2',
@@ -25,13 +28,16 @@ describe('FleetState', () => {
       plate: '1234-MLG',
       type: 'van',
       status: 'active',
+      routeId: null,
       telemetry: {
         lat: 36.7201,
         lng: -4.4203,
         fuelLevel: 90,
         speed: 0,
         lastUpdate: new Date().toISOString()
-      }
+      },
+      fallbackLat: 36.7213,
+      fallbackLng: -4.4214,
     }
   ];
 

@@ -1,5 +1,4 @@
 import { Vehicle } from '../models/vehicle.model';
-import { MAD_ROUTE } from './routes';
 
 export const MOCK_VEHICLES: Vehicle[] = [
   {
@@ -8,7 +7,11 @@ export const MOCK_VEHICLES: Vehicle[] = [
     plate: '1234-MAD',
     type: 'truck',
     status: 'active',
-    telemetry: { lat: MAD_ROUTE[0][0], lng: MAD_ROUTE[0][1], fuelLevel: 82, speed: 90, lastUpdate: new Date().toISOString() }
+    fallbackLat: 40.4168,
+    fallbackLng: -3.7038,
+    routeId: 'MAD-SOL-MAD4',
+    currentRoutePosition: 0,
+    telemetry: { fuelLevel: 82, speed: 90, lastUpdate: new Date().toISOString() }
   },
   {
     id: '2',
@@ -16,7 +19,10 @@ export const MOCK_VEHICLES: Vehicle[] = [
     plate: '1234-BCN',
     type: 'van',
     status: 'idle',
-    telemetry: { lat: 41.3851, lng: 2.1734, fuelLevel: 35, speed: 0, lastUpdate: new Date().toISOString() }
+    fallbackLat: 41.3851,
+    fallbackLng: 2.1734,
+    routeId: null,
+    telemetry: { fuelLevel: 35, speed: 0, lastUpdate: new Date().toISOString() }
   },
   {
     id: '3',
@@ -24,12 +30,9 @@ export const MOCK_VEHICLES: Vehicle[] = [
     plate: '1234-MLG',
     type: 'truck',
     status: 'active',
-    telemetry: {
-      lat: 36.7213,
-      lng: -4.4214,
-      fuelLevel: 85,
-      speed: 0,
-      lastUpdate: new Date().toISOString()
-    }
+    fallbackLat: 36.7213,
+    fallbackLng: -4.4214,
+    routeId: 'MLG-MALAGUETA-DQA3',
+    telemetry: { fuelLevel: 85, speed: 0, lastUpdate: new Date().toISOString() }
   }
 ];
