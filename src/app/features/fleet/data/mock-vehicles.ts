@@ -1,4 +1,5 @@
 import { Vehicle } from '../models/vehicle.model';
+import { MAD_ROUTE } from './routes';
 
 export const MOCK_VEHICLES: Vehicle[] = [
   {
@@ -7,7 +8,7 @@ export const MOCK_VEHICLES: Vehicle[] = [
     plate: '1234-MAD',
     type: 'truck',
     status: 'active',
-    telemetry: { lat: 40.4168, lng: -3.7038, fuelLevel: 82, speed: 90, lastUpdate: new Date().toISOString() }
+    telemetry: { lat: MAD_ROUTE[0][0], lng: MAD_ROUTE[0][1], fuelLevel: 82, speed: 90, lastUpdate: new Date().toISOString() }
   },
   {
     id: '2',

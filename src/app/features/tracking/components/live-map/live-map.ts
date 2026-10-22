@@ -4,6 +4,8 @@ import * as L from 'leaflet';
 import { FleetFacade } from '../../../fleet/facades/fleet.facade';
 import { Vehicle, VehicleStatus, VehicleType } from '../../../fleet/models/vehicle.model';
 
+import { MAD_ROUTE } from '../../../fleet/data/routes';
+
 const MAP_ICONS = {
   TRUCK: 'M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z',
   VAN: 'M18 11V6H2v11h1c0 1.66 1.34 3 3 3s3-1.34 3-3h4c0 1.66 1.34 3 3 3s3-1.34 3-3h1v-4l-3-2z'
@@ -73,6 +75,17 @@ export class LiveMap implements OnInit {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
+
+    // Draw the route (Madrid) and fit the map to its bounds
+    const route = L.polyline(MAD_ROUTE, {
+      color: '#2563eb',
+      weight: 4,
+      opacity: 0.8
+    }).addTo(this.map);
+
+    this.map.fitBounds(route.getBounds(), {
+      padding: [30, 30]
+    });
   }
 
   private updateMarkers(vehicles: Vehicle[]): void {
