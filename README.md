@@ -8,7 +8,7 @@ Nodus is a fleet tracking app where you can see vehicles, their status, live tel
 
 For this demo, I created a small fleet with three vehicles. Two are active, travelling from Madrid and Málaga to Amazon logistics facilities. The third vehicle is idle.
 
-Demo: TODO
+**Try it here:** [Nodus Live Demo](https://jcdotnet.github.io/nodus/)
 
 Or in case that you have cloned the repository, please run the application:
 ```bash
