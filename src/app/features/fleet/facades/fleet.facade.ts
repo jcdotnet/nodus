@@ -13,6 +13,8 @@ export class FleetFacade {
 
   private readonly _selectedId = signal<string | null>(null);
 
+  private vehiclesLoaded = false;
+
   // Expose state as read-only signals
   readonly vehicles = this.state.vehicles;
   readonly loading = this.state.loading;
@@ -24,6 +26,8 @@ export class FleetFacade {
    * Initializes the fleet load and then switches to the live telemetry stream
    */
   loadVehicles(): void {
+    if (this.vehiclesLoaded) return;
+
     this.state.setLoading(true);
 
     this.dataService.getVehicles()
@@ -31,6 +35,7 @@ export class FleetFacade {
         tap((data) => {
           this.state.setVehicles(data);
           this.state.setLoading(false);
+          this.vehiclesLoaded = true;
         }),
         // Once initial data is loaded, switch to the real-time stream
         switchMap(() => this.dataService.getLiveTelemetry()),
