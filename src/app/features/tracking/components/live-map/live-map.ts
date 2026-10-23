@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
 
@@ -17,7 +17,6 @@ const MAP_ICONS = {
   imports: [],
   templateUrl: './live-map.html',
   styleUrl: './live-map.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LiveMap implements OnInit {
   private readonly facade = inject(FleetFacade);

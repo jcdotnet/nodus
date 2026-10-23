@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FleetFacade } from '../../facades/fleet.facade';
 import { Router } from '@angular/router';
 import { VehicleStatus } from '../../models/vehicle.model';
@@ -9,7 +9,6 @@ import { DecimalPipe } from '@angular/common';
   imports: [DecimalPipe],
   templateUrl: './fleet-list.html',
   styleUrl: './fleet-list.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FleetList {
 
