@@ -1,8 +1,9 @@
 export type VehicleStatus = 'active' | 'maintenance' | 'idle' | 'emergency';
+export type VehicleType = 'truck' | 'van' | 'car';
 
 export interface VehicleTelemetry {
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
   fuelLevel: number;
   speed: number;
   lastUpdate: string;
@@ -12,7 +13,11 @@ export interface Vehicle {
   id: string;
   vin: string;
   plate: string;
-  type: 'truck' | 'van' | 'car';
+  type: VehicleType;
   status: VehicleStatus;
+  routeId: string | null;
+  currentRoutePosition?: number;
+  fallbackLat: number;
+  fallbackLng: number;
   telemetry: VehicleTelemetry;
 }

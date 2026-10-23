@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import * as L from 'leaflet';
 
 import { FleetFacade } from '../../../fleet/facades/fleet.facade';
+import { Vehicle, VehicleStatus, VehicleType } from '../../../fleet/models/vehicle.model';
+import { Route } from '../../models/route.model';
+import { RouteService } from '../../services/route.service';
 
 const MAP_ICONS = {
   TRUCK: 'M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z',
@@ -13,35 +17,46 @@ const MAP_ICONS = {
   imports: [],
   templateUrl: './live-map.html',
   styleUrl: './live-map.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LiveMap implements OnInit {
   private readonly facade = inject(FleetFacade);
+  private readonly router = inject(Router);
+  private readonly routeService = inject(RouteService);
+
   private mapContainer = viewChild.required<ElementRef>('mapContainer');
 
   private map!: L.Map;
   private markers = new Map<string, L.Marker>();
+  private routes: Route[] = [];
 
   constructor() {
     effect(() => {
       this.updateMarkers(this.facade.vehicles());
     });
     effect(() => {
+      // Fly to the selectd vehicle and open its popup
       const id = this.facade.selectedId();
-      if (id && this.markers.has(id)) {
-        const marker = this.markers.get(id)!;
-        // Professional smooth transition
-        this.map.flyTo(marker.getLatLng(), 14, {
-          animate: true,
-          duration: 2 // seconds
-        });
-        marker.openPopup();
+
+      if (!history.state?.focusVehicle || !id || !this.markers.has(id)) {
+        return;
       }
+
+      const marker = this.markers.get(id)!;
+
+      this.map.flyTo(marker.getLatLng(), 14, {
+        animate: true,
+        duration: 2 // seconds
+      });
+      marker.openPopup();
     });
   }
 
   ngOnInit(): void {
     this.facade.loadVehicles();
+    this.routeService.getRoutes().subscribe(routes => {
+      this.routes = routes;
+      this.drawRoutes(this.facade.vehicles());
+    });
     this.initMap();
   }
 
@@ -49,7 +64,7 @@ export class LiveMap implements OnInit {
   * Generates a custom SVG icon for Leaflet markers based on vehicle properties.
   * Using DivIcon to avoid external image requests and allow dynamic styling.
   */
-  private createVehicleIcon(type: string, status: string): L.DivIcon {
+  private createVehicleIcon(type: VehicleType, status: VehicleStatus): L.DivIcon {
     const iconPath = type.toLowerCase() === 'truck' ? MAP_ICONS.TRUCK : MAP_ICONS.VAN;
     const color = status === 'active' ? '#2563eb' : '#64748b';
 
@@ -66,6 +81,29 @@ export class LiveMap implements OnInit {
     });
   }
 
+  private drawRoutes(vehicles: Vehicle[]): void {
+    const polylines: L.Polyline[] = [];
+    vehicles.forEach(vehicle => {
+      if (!vehicle.routeId) return;
+      const route = this.routes.find(
+        route => route.id === vehicle.routeId
+      );
+
+      if (!route) return;
+
+      const coordinates: L.LatLngTuple[] = route.points.map(
+        point => [point.lat, point.lng]
+      );
+
+      const polyline = L.polyline(coordinates, {
+        color: '#2563eb',
+        weight: 4,
+        opacity: 0.8
+      }).addTo(this.map);
+      polylines.push(polyline);
+    });
+  }
+
   private initMap(): void {
     this.map = L.map(this.mapContainer().nativeElement).setView([40.4168, -3.7038], 6);
 
@@ -74,11 +112,12 @@ export class LiveMap implements OnInit {
     }).addTo(this.map);
   }
 
-  private updateMarkers(vehicles: any[]): void {
+  private updateMarkers(vehicles: Vehicle[]): void {
     if (!this.map) return;
 
     vehicles.forEach(vehicle => {
-      const { lat, lng } = vehicle.telemetry;
+      const lat = vehicle.telemetry.lat ?? vehicle.fallbackLat;
+      const lng = vehicle.telemetry.lng ?? vehicle.fallbackLng;
 
       if (this.markers.has(vehicle.id)) {
         // Update marker position smoothly

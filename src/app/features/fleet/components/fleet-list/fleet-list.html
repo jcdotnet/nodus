@@ -46,7 +46,8 @@
                 <div class="h-full bg-blue-500 transition-all duration-500"
                   [style.width.%]="vehicle.telemetry.fuelLevel"></div>
               </div>
-              <span class="text-xs font-medium text-slate-600">{{ vehicle.telemetry.fuelLevel }}%</span>
+              <span class="text-xs font-medium text-slate-600">{{ vehicle.telemetry.fuelLevel | number:'1.0-1'
+                }}%</span>
             </div>
           </td>
           <td class="p-4 text-right text-sm font-medium text-slate-700">

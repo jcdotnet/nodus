@@ -1,11 +1,20 @@
 # Nodus
 
-Nodus (it means "node" or "connection") is a logistics tracking engine built to explore high-performance patterns in Angular. The project focuses on handling real-time telemetry updates.
+Nodus is a fleet tracking app where you can see vehicles, their status, live telemetry (data such as speed, fuel level and location) and the routes they follow.
 
-I used Angular 21 with Signals and Zoneless change detection, DDD to keep the business logic clean, RxJS for the live data stream from the vehicles, Tailwind CSS for the UI and Leaflet for the live map. I chose to stay to stick with the default Karma/Jasmine setup provided by `ng new` rather than migrating to Jest, prioritizing development over test runner configuration. I might consider migrating to Jest in the future.
+**Fleet Assets** view: Shows the three vehicles in the fleet, their status and telemetry. You can also locate each vehicle on the map.
 
+**Live Tracking** view: Shows the vehicles and their routes on an interactive map, with simulated movement along the routes.
+
+For this demo, I created a small fleet with three vehicles. Two are active, travelling from Madrid and Málaga to Amazon logistics facilities. The third vehicle is idle.
+
+**Try it here:** [Nodus Live Demo](https://jcdotnet.github.io/nodus/)
+
+Or in case that you have cloned the repository, please run the application:
 ```bash
 npm install
 npm start
 ```
+I have always enjoyed looking at maps, exploring streets and planning routes. That gave me the idea for this project. The name Nodus means *node* or *connection* in Latin, which fits the idea of connecting vehicles, routes and locations.
+
 You can find the architecture overview in `docs/ARCHITECTURE.md`.
