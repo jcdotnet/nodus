@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { FleetDataService } from './fleet-data.service';
 import { provideZonelessChangeDetection } from '@angular/core';
-import { take } from 'rxjs';
+import { firstValueFrom, take, toArray } from 'rxjs';
 import { Vehicle } from '../models/vehicle.model';
 
 describe('FleetDataService', () => {
@@ -14,22 +14,27 @@ describe('FleetDataService', () => {
     service = TestBed.inject(FleetDataService);
   });
 
-  it('should return vehicles after the simulated delay', (done: DoneFn) => {
-    service.getVehicles().subscribe((data: Vehicle[]) => {
+  describe('getVehicles', () => {
+    it('should return vehicles after the simulated delay', async () => {
+      const data: Vehicle[] = await firstValueFrom(service.getVehicles());
+
       expect(data.length).toBe(3);
       expect(data[0].plate).toBe('1234-MAD');
-      done();
     });
   });
 
-  it('should emit periodic updates for telemetry', (done: DoneFn) => {
-    service.getLiveTelemetry().pipe(take(2)).subscribe({
-      next: (data) => {
-        expect(data.length).toBe(3);
-      },
-      complete: () => {
-        done();
-      }
+  describe('getLiveTelemetry', () => {
+    it('should emit an immediate telemetry update', async () => {
+      const data = await firstValueFrom(service.getLiveTelemetry());
+
+      expect(data).toBeDefined();
+    });
+
+    it('should emit periodic updates for telemetry', async () => {
+      const updates = await firstValueFrom(
+        service.getLiveTelemetry().pipe(take(2), toArray())
+      );
+      expect(updates).toHaveLength(2);
     });
   });
 

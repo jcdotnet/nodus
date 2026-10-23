@@ -5,11 +5,16 @@ import { FleetFacade } from './fleet.facade';
 import { Vehicle } from '../models/vehicle.model';
 import { of } from 'rxjs';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { Mock } from 'vitest';
 
 describe('FleetFacade', () => {
   let facade: FleetFacade;
   let state: FleetState;
-  let fleetDataServiceMock: jasmine.SpyObj<FleetDataService>;
+
+  let fleetDataServiceMock: {
+    getVehicles: Mock;
+    getLiveTelemetry: Mock;
+  };
 
   const mockVehicle: Vehicle = {
     id: 'v-1',
@@ -28,34 +33,64 @@ describe('FleetFacade', () => {
   };
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('FleetDataService', ['getVehicles', 'getLiveTelemetry']);
+    fleetDataServiceMock = {
+      getVehicles: vi.fn(),
+      getLiveTelemetry: vi.fn()
+    };
 
     TestBed.configureTestingModule({
       providers: [
         provideZonelessChangeDetection(),
         FleetFacade,
         FleetState,
-        { provide: FleetDataService, useValue: spy }
+        { provide: FleetDataService, useValue: fleetDataServiceMock }
       ]
     });
 
     facade = TestBed.inject(FleetFacade);
     state = TestBed.inject(FleetState);
-    fleetDataServiceMock = TestBed.inject(FleetDataService) as jasmine.SpyObj<FleetDataService>;
   });
 
-  it('should load vehicles and start updatesm', () => {
+  describe('loadVehicles', () => {
 
-    const mockList = [mockVehicle];
-    fleetDataServiceMock.getVehicles.and.returnValue(of(mockList));
-    fleetDataServiceMock.getLiveTelemetry.and.returnValue(of(mockList));
+    const mockVehicles = [mockVehicle];
+    beforeEach(() => {
+      // Arrange
+      fleetDataServiceMock.getVehicles.mockReturnValue(of(mockVehicles));
+      fleetDataServiceMock.getLiveTelemetry.mockReturnValue(of(mockVehicles));
+    });
 
-    facade.loadVehicles();
+    it('should load vehicles and start updates', () => {
+      // Arrange
+      // Act
+      facade.loadVehicles();
 
-    expect(fleetDataServiceMock.getVehicles).toHaveBeenCalled();
-    expect(fleetDataServiceMock.getLiveTelemetry).toHaveBeenCalled();
-    expect(state.vehicles()).toEqual(mockList);
-    expect(state.loading()).toBeFalse();
+      // Assert
+      expect(fleetDataServiceMock.getVehicles).toHaveBeenCalled();
+      expect(fleetDataServiceMock.getLiveTelemetry).toHaveBeenCalled();
+      expect(state.vehicles()).toEqual(mockVehicles);
+      expect(state.loading()).toBe(false);
+    });
+
+    it('should not load vehicles again if already loaded', () => {
+      // Arrange
+      // Act
+      facade.loadVehicles();
+      facade.loadVehicles();
+
+      // Assert
+      expect(fleetDataServiceMock.getVehicles).toHaveBeenCalledTimes(1);
+      expect(fleetDataServiceMock.getLiveTelemetry).toHaveBeenCalledTimes(1);
+    });
+
+    it('should reset loading after loading vehicles', () => {
+      // Arrange
+      // Act
+      facade.loadVehicles();
+
+      // Assert
+      expect(state.loading()).toBe(false);
+    });
   });
 
   it('should update selected vehicle id', () => {

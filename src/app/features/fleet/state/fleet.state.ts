@@ -1,6 +1,9 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { Vehicle } from '../models/vehicle.model';
 
+/**
+ * Manages the fleet state using Angular Signals
+ */
 @Injectable({ providedIn: 'root' })
 export class FleetState {
 
@@ -46,7 +49,6 @@ export class FleetState {
       const saved = localStorage.getItem(this.STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
-      // Return empty array if JSON parsing fails or storage is inaccessible
       return [];
     }
   }

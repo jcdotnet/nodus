@@ -58,21 +58,28 @@ describe('FleetState', () => {
   });
 
   it('should persist data to storage', () => {
-    const spy = spyOn(localStorage, 'setItem');
+    const spy = vi.spyOn(Storage.prototype, 'setItem');
+
     state.setVehicles(mockVehicles);
     expect(spy).toHaveBeenCalledWith('nodus_fleet_data', JSON.stringify(mockVehicles));
   });
 
-  it('should recover state from storage on init', () => {
+  it('should recover state from storage on init when valid', () => {
     localStorage.setItem('nodus_fleet_data', JSON.stringify(mockVehicles));
     const newState = new FleetState();
     expect(newState.vehicles()).toEqual(mockVehicles);
   });
 
+  it('hould recover empty state from storage on init when data is invalid', () => {
+    localStorage.setItem('nodus_fleet_data', 'invalid-json');
+    const newState = new FleetState();
+    expect(newState.vehicles()).toEqual([]);
+  });
+
   it('should update loading status', () => {
     state.setLoading(true);
-    expect(state.loading()).toBeTrue();
+    expect(state.loading()).toBe(true);
     state.setLoading(false);
-    expect(state.loading()).toBeFalse();
+    expect(state.loading()).toBe(false);
   });
 });
